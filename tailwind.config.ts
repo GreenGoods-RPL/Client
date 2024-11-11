@@ -16,6 +16,10 @@ const config: Config = {
         neutral: "#FFFBE6",
         dark: "#565151"
       },
+      fontFamily: {
+        montserrat: ["var(--font-montserrat)"],
+        yanone: ["var(--font-yanone)"],
+      },
     },
   },
   plugins: [],

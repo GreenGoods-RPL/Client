@@ -31,10 +31,10 @@ const Header = () => {
 
           {/* Text Links for Desktop */}
           <div className="hidden md:flex gap-6">
-            <a href="/" className="text-lg font-semibold hover:text-blue-600">
+            <a href="/" className="text-lg font-semibold text-primary hover:text-secondary">
               Home
             </a>
-            <a href="/leaderboard" className="text-lg font-semibold hover:text-blue-600">
+            <a href="/leaderboard" className="text-lg font-semibold text-primary hover:text-secondary">
               Leaderboard
             </a>
           </div>
