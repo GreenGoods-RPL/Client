@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import logo from "@public/icons/GreenGoods_transparent.png";
 import { FaHome, FaTrophy } from 'react-icons/fa';
 import { Search, ShoppingCart, User } from 'lucide-react'
@@ -22,22 +23,22 @@ const Header = () => {
         <nav className="flex gap-6">
           {/* Mobile Icons */}
           <div className="md:hidden flex gap-4">
-            <a href="/" className="text-lg">
+            <Link href="/" className="text-lg">
               <FaHome size={24} className="text-primary"/>
-            </a>
-            <a href="/leaderboard" className="text-lg">
+            </Link>
+            <Link href="/leaderboard" className="text-lg">
               <FaTrophy size={24} className="text-primary"/>
-            </a>
+            </Link>
           </div>
 
           {/* Text Links for Desktop */}
           <div className="hidden md:flex gap-6">
-            <a href="/" className="text-lg font-semibold text-primary hover:text-secondary">
+            <Link href="/" className="text-lg font-semibold hover:text-blue-600">
               Home
-            </a>
-            <a href="/leaderboard" className="text-lg font-semibold text-primary hover:text-secondary">
+            </Link>
+            <Link href="/leaderboard" className="text-lg font-semibold hover:text-blue-600">
               Leaderboard
-            </a>
+            </Link>
           </div>
         </nav>
 
