@@ -1,6 +1,5 @@
 import AboutHeroSection from '@/components/AboutHeroSection'
 import AboutFutureSection from '@/components/AboutFutureSection'
-import AboutFooter from '@/components/AboutFooter'
 import React from 'react'
 
 export default function Home() {
@@ -10,7 +9,6 @@ export default function Home() {
         <AboutHeroSection />
         <AboutFutureSection />
       </div>
-      <AboutFooter />
     </main>
   )
 }
