@@ -1,8 +1,18 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { Montserrat } from 'next/font/google';
+import { Montserrat, Yanone_Kaffeesatz } from "next/font/google";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
-const montserrat = Montserrat({ subsets: ['latin'] });
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+});
+const yanone = Yanone_Kaffeesatz({
+  subsets: ["latin"],
+  variable: "--font-yanone",
+});
 
 export const metadata: Metadata = {
   title: "GreenGoods",
@@ -16,10 +26,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${montserrat.className} antialiased`}
-      >
+      <body className={`${montserrat.variable} ${yanone.variable} antialiased`}>
+        <Header />
         {children}
+      <Footer />
+
       </body>
     </html>
   );
