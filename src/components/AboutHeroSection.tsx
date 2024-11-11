@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import world_map from '@public/images/world-map.png'
 
 export default function AboutHeroSection() {
   return (
@@ -21,7 +22,7 @@ export default function AboutHeroSection() {
       
       <div className="bg-blue-900 rounded-lg overflow-hidden">
         <Image
-          src="/world-map.png"
+          src={world_map}
           alt="World connection"
           width={600}
           height={400}

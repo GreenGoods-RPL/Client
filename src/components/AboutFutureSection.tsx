@@ -1,14 +1,15 @@
 import Image from 'next/image'
+import collaboration from '@public/images/collaboration.png'
 
 export default function AboutFutureSection() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div className="rounded-lg overflow-hidden">
+    <div className="flex justify-between">
+      <div className="rounded-lg overflow-hidden h-[480px]">
         <Image
-          src="/collaboration.jpg"
+          src={collaboration}
           alt="People collaborating"
-          width={600}
-          height={400}
+          width={800}
+          height={1200}
           className="w-full h-full object-cover"
         />
       </div>
