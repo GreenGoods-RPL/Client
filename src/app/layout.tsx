@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Montserrat, Yanone_Kaffeesatz } from "next/font/google";
+import Header from "@/components/Header";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -23,9 +24,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${montserrat.variable} ${yanone.variable} antialiased`}
-      >
+      <body className={`${montserrat.variable} ${yanone.variable} antialiased`}>
+        <Header />
         {children}
       </body>
     </html>

@@ -1,5 +1,4 @@
 import Button from "@/components/Button";
-import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import ProductCard from "@/components/ProductCard";
 import duck from "@public/images/duck.jpeg";
@@ -37,8 +36,7 @@ const products = [
 
 export default function Home() {
   return (
-    <div className="font-montserrat p-10 lg:p-16">
-      <Header />
+    <div className="font-montserrat px-10 lg:px-16">
       <main className="">
         <Hero />
         <section className="py-8">

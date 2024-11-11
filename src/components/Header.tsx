@@ -1,10 +1,11 @@
 import Image from "next/image";
 import logo from "@public/icons/GreenGoods_transparent.png";
 import { FaHome, FaTrophy } from 'react-icons/fa';
+import { Search, ShoppingCart, User } from 'lucide-react'
 
 const Header = () => {
   return (
-    <header className="w-full p-4">
+    <header className="w-full py-6 px-10 lg:px-16">
       <div className="flex justify-between items-center flex-wrap md:flex-nowrap">
         {/* Logo Section */}
         <div className="flex items-center gap-2 relative h-16 w-16">
@@ -41,16 +42,18 @@ const Header = () => {
         </nav>
 
         {/* Search Bar - Inline in Desktop, Below in Mobile */}
-        <div className="relative w-full md:w-[350px] xl:w-[700px] mt-4 md:mt-0">
-          <input
-            type="text"
-            placeholder="Search products..."
-            className="w-full h-10 px-4 border-2 border-gray-300 rounded-full focus:outline-none"
-          />
-          <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-500 text-white px-3 py-1 rounded-lg hover:bg-blue-600">
-            Search
-          </button>
-        </div>
+        <div className="flex items-center space-x-4">
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search for products..."
+                className="w-96 px-4 py-2 rounded-lg"
+              />
+              <Search className="absolute right-3 top-2.5 text-gray-400" />
+            </div>
+            <ShoppingCart className="text-white" />
+            <User className="text-white" />
+          </div>
       </div>
     </header>
   );
