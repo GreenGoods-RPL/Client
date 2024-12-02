@@ -1,7 +1,5 @@
 'use client'
 import React, { useEffect, useState } from "react";
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 
 export default function TransactionsPage() {
   const [transaction, setTransactions] = useState([]);
@@ -10,12 +8,23 @@ export default function TransactionsPage() {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-          const response = await fetch("http://localhost:8008/api/user/transactions");
-          if (!response.ok) {
-          throw new Error("Failed to fetch transactions.");
-          }
-          const data = await response.json();
-          setTransactions(data);
+        // setRole(userRole);
+        // const apiEndpoint = userRole === "seller" ?
+        //      "http://localhost:8008/api/seller" :
+        //      "http://localhost:8008/api/user";
+        const token = localStorage.getItem("token");
+        const response = await fetch("http://localhost:8008/api/user", {
+          method: "GET",
+          headers: {
+              "Content-Type:": "api/transactions",
+              Authorization: `Bearer ${token}`,
+          },
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch transactions.");
+        }
+        const data = await response.json();
+        setTransactions(data);
       } catch (error) {
           console.error("Error fetching transactions:", error);
       } finally {
