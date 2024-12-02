@@ -8,15 +8,15 @@ export default function TransactionsPage() {
   useEffect(() => {
     const fetchTransactions = async () => {
       try {
-        // setRole(userRole);
-        // const apiEndpoint = userRole === "seller" ?
-        //      "http://localhost:8008/api/seller" :
-        //      "http://localhost:8008/api/user";
         const token = localStorage.getItem("token");
-        const response = await fetch("http://localhost:8008/api/user", {
+        const userRole = localStorage.getItem("role"); // Assuming role is stored in localStorage
+        const apiEndpoint = userRole === "seller" ?
+             "http://localhost:8008/api/seller" :
+             "http://localhost:8008/api/user";
+        const response = await fetch(apiEndpoint, {
           method: "GET",
           headers: {
-              "Content-Type:": "api/transactions",
+              "Content-Type": "application/json",
               Authorization: `Bearer ${token}`,
           },
         });
@@ -37,17 +37,25 @@ export default function TransactionsPage() {
 
   if (isLoading) {
     return (
-        <div className="min-h-screen flex items-center justify-center">
-          <p>Loading...</p>
-        </div>
+        <>
+          <h1>Your Transactions</h1>
+          
+          <div className="min-h-screen flex items-center justify-center">
+            <p>Loading...</p>
+          </div>
+        </>
     );
   }
 
   if (!transaction.length) {
     return (
-        <div className="min-h-screen flex items-center justify-center">
-          <p>Transactions not found.</p>
-        </div>
+        <>
+          <h1>Your Transactions</h1>
+          
+          <div className="min-h-screen flex items-center justify-center">
+            <p>Transactions not found.</p>
+          </div>
+        </>
     );
   }
 
