@@ -1,4 +1,3 @@
-import Image from 'next/image'
 import { Twitter, Facebook, Instagram, Youtube } from 'lucide-react'
 
 export default function AboutFooter() {
@@ -56,13 +55,6 @@ export default function AboutFooter() {
         
         <div className="mt-12 pt-8 border-t border-gray-200 flex items-center justify-between">
           <p className="text-sm text-gray-600">GREENGOODS © 2000-2023. All Rights Reserved</p>
-          <div className="flex space-x-4">
-            <Image src="/visa.png" alt="Visa" width={40} height={25} />
-            <Image src="/mastercard.png" alt="Mastercard" width={40} height={25} />
-            <Image src="/paypal.png" alt="PayPal" width={40} height={25} />
-            <Image src="/apple-pay.png" alt="Apple Pay" width={40} height={25} />
-            <Image src="/google-pay.png" alt="Google Pay" width={40} height={25} />
-          </div>
         </div>
       </div>
     </footer>

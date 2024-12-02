@@ -1,23 +1,55 @@
-import Image from "next/image";
-import login from "@public/images/login.png";
-import logo from "@public/icons/GreenGoods_transparent.png"; // Assuming a logo image exists
+"use client";
 
-export default function page() {
+import Image from "next/image";
+import login from "@public/images/signup.png";
+import Logo from "../Logo";
+import Link from "next/link";
+import { useState } from "react";
+
+export default function Page() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch("http://localhost:8008/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        setError(errorData.message || "Login failed");
+        setLoading(false);
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Login successful:", data);
+
+      localStorage.setItem("token", data.token);
+      // You can redirect or handle success here
+      window.location.href = "/"; // Example redirect
+    } catch (err) {
+      setError("An unexpected error occurred");
+      console.error("Login error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="flex flex-col items-center justify-center min-h-screen">
-      {/* Top Logo */}
-      <div className="absolute top-4 left-4">
-        <a href="/">
-          <Image
-            src={logo}
-            alt="Logo"
-            width={50}
-            height={50}
-            className="cursor-pointer"
-          />
-        </a>
-      </div>
-
+      <Logo />
       {/* Main Content */}
       <div className="flex flex-col lg:flex-row items-center shadow-lg rounded-3xl bg-neutral border-2">
         {/* Left Image */}
@@ -32,12 +64,19 @@ export default function page() {
 
         {/* Right Login Form */}
         <div className="p-8 w-full lg:w-[450px]">
-          <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+          <h2 className="text-2xl font-bold text-center mb-6 text-primary font-montserrat">
             Login
           </h2>
 
+          {/* Error Message */}
+          {error && (
+            <p className="text-red-500 text-center mb-4">
+              {error}
+            </p>
+          )}
+
           {/* Login Form */}
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleLogin}>
             {/* Email Input */}
             <div>
               <label
@@ -50,7 +89,10 @@ export default function page() {
                 type="email"
                 id="email"
                 placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+                required
               />
             </div>
 
@@ -66,7 +108,10 @@ export default function page() {
                 type="password"
                 id="password"
                 placeholder="Enter your password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="w-full mt-1 px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary focus:outline-none"
+                required
               />
             </div>
 
@@ -74,9 +119,14 @@ export default function page() {
             <div>
               <button
                 type="submit"
-                className="w-full bg-primary text-white py-2 rounded-lg hover:bg-secondary transition-colors"
+                disabled={loading}
+                className={`w-full py-2 rounded-lg transition-colors ${
+                  loading
+                    ? "bg-gray-400"
+                    : "bg-primary text-white hover:bg-secondary"
+                }`}
               >
-                Login
+                {loading ? "Logging in..." : "Login"}
               </button>
             </div>
           </form>
@@ -84,12 +134,12 @@ export default function page() {
           {/* Signup Link */}
           <p className="text-center mt-4 text-sm text-gray-600">
             Don&apos;t have an account?{" "}
-            <a
+            <Link
               href="/signup"
               className="text-primary font-medium hover:underline"
             >
               Sign up
-            </a>
+            </Link>
           </p>
         </div>
       </div>
