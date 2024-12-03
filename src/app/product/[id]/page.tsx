@@ -1,26 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, use } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import duck from "@public/images/duck.jpeg";
+import { getProductById } from "@/services/product";
+import { getReviews, createReview } from "@/services/review";
+import { purchaseProduct } from "@/services/product";
 
-export default function ProductDetails({ params }: { params: any }) {
-  const id = params.id;
+export default function ProductDetails({ params }: { params: { id: string } }) {
+  const productId = use(params).id;
   const [product, setProduct] = useState<any>(null);
+  const [review, setReview] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [visibleReviews, setVisibleReviews] = useState<number>(4);
+
+  // Refs for form inputs
+  const ratingRef = useRef<HTMLInputElement>(null);
+  const commentRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    if (id) {
+    if (productId) {
       const fetchProduct = async () => {
         try {
-          const response = await fetch(`http://localhost:8008/api/product/${id}`);
-          if (!response.ok) {
-            throw new Error("Failed to fetch product details.");
-          }
-          const data = await response.json();
-          setProduct(data);
+          const product = await getProductById(productId);
+          setProduct(product);
         } catch (error) {
           console.error("Error fetching product details:", error);
         } finally {
@@ -28,9 +34,75 @@ export default function ProductDetails({ params }: { params: any }) {
         }
       };
 
+      const fetchReviews = async () => {
+        try {
+          const reviewData = await getReviews(productId);
+          setReview(reviewData);
+        } catch (error) {
+          console.error("Error fetching product reviews:", error);
+        }
+      };
+
       fetchProduct();
+      fetchReviews();
     }
-  }, [id]);
+  }, [productId]);
+
+  const handleAddReview = async () => {
+    try {
+      const rating = ratingRef.current?.value;
+      const comment = commentRef.current?.value;
+
+      if (!rating || !comment) {
+        alert("Please fill out all fields.");
+        return;
+      }
+
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No authentication token available");
+      }
+
+      const result = await createReview(
+        { productId, rating: Number(rating), comment },
+        token
+      );
+
+      setReview({ ...review, reviews: [result, ...review.reviews] });
+      console.log("Review submitted:", result);
+
+      // Clear input fields
+      if (ratingRef.current) ratingRef.current.value = "";
+      if (commentRef.current) commentRef.current.value = "";
+    } catch (error) {
+      console.error("Error adding review:", error);
+    }
+  };
+
+  const handleLoadMoreReviews = () => {
+    setVisibleReviews(visibleReviews + 4);
+  };
+
+  const handleQuantityChange = (type: string) => {
+    setQuantity((prev) =>
+      type === "increment" ? prev + 1 : Math.max(prev - 1, 1)
+    );
+  };
+
+  const handlePurchase = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        throw new Error("No authentication token available");
+      }
+
+      const result = await purchaseProduct(productId, quantity, token);
+      alert("Product purchased successfully!");
+      console.log("Product purchased:", result);
+    } catch (error) {
+      console.error("Error purchasing product:", error);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -59,12 +131,12 @@ export default function ProductDetails({ params }: { params: any }) {
   return (
     <>
       <Header />
-      <div className="font-montserrat px-10 lg:px-16 py-8 bg-[#E8F6F3]">
-        <div className="max-w-6xl mx-auto bg-white shadow-md rounded-lg p-8">
+      <div className="font-montserrat px-10 lg:px-32">
+        <div className="rounded-lg py-8">
           {/* Product Info Section */}
           <div className="flex flex-col md:flex-row gap-10">
             {/* Product Image */}
-            <div className="w-full md:w-1/2">
+            <div className="md:w-1/2">
               <Image
                 src={duck}
                 alt="Product Image"
@@ -72,84 +144,151 @@ export default function ProductDetails({ params }: { params: any }) {
               />
             </div>
             {/* Product Details */}
-            <div className="w-full md:w-1/2">
-              <h1 className="text-3xl font-bold text-gray-800 mb-4">
+            <div className="w-full md:w-1/2 py-5">
+              <h1 className="text-6xl font-bold text-gray-800 mb-4 font-yanone">
                 {product.name}
               </h1>
               <div className="flex items-center mb-4">
-                <span className="text-yellow-400 text-2xl">
+                <span className="text-yellow-400 text-4xl">
                   {"★".repeat(Math.round(product.avg_rating))}
                   {"☆".repeat(5 - Math.round(product.avg_rating))}
                 </span>
-                <span className="ml-3 text-gray-600">
+                <span className="ml-3 text-gray-600 text-lg">
                   ({product.avg_rating} / 5)
                 </span>
               </div>
-              <p className="text-2xl font-bold text-gray-800 mb-2">
-                ${product.price}{" "}
-                <span className="line-through text-gray-400 text-xl">
-                  ${product.original_price || ""}
-                </span>{" "}
-                <span className="text-green-600 text-xl">
-                  {product.discount ? `${product.discount}% Off` : ""}
-                </span>
+              <p className="text-3xl font-bold text-gray-800 my-5">
+                ${product.price}
               </p>
-              <p className="text-gray-700 text-lg mb-4">{product.description}</p>
-              <p className="text-green-700 text-lg font-semibold mb-6">
-                Eco-score: {product.green_score}
-              </p>
-              <div className="flex items-center gap-4">
-                <label className="text-gray-700 text-lg">Choose Size:</label>
-                <div className="flex gap-2">
-                  {["Small", "Medium", "Large", "XLarge"].map((size) => (
-                    <button
-                      key={size}
-                      className="py-2 px-4 border rounded-md text-gray-800 hover:bg-gray-100 focus:bg-gray-200"
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
+              <hr className="border-neutral my-4" />
+              <div>
+                <p className="text-lg font-semibold mb-2 text-primary">
+                  Description:
+                </p>
+                <p className="text-gray-700 text-lg">{product.description}</p>
               </div>
+              <hr className="border-neutral my-4" />
+              <div className="flex-col items-center py-2 max-w-36">
+                <p className="text-lg font-semibold mb-2 text-primary">
+                  Eco-score:
+                </p>
+                <p className="font-bold text-2xl">{product.green_score}</p>
+              </div>
+              <hr className="border-neutral my-4" />
               <div className="flex items-center gap-4 mt-6">
-                <button className="bg-primary text-white py-2 px-6 rounded-lg shadow hover:bg-primary-dark">
+                {/* Quantity Controls */}
+                <div className="flex items-center text-white py-3 bg-secondary rounded-full min-w-32">
+                  <button
+                    onClick={() => handleQuantityChange("decrement")}
+                    className="px-4"
+                  >
+                    -
+                  </button>
+                  <span className="px-4">{quantity}</span>
+                  <button
+                    onClick={() => handleQuantityChange("increment")}
+                    className="px-4"
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  className="bg-secondary hover:bg-primary w-full text-white py-3 px-6 rounded-full shadow hover:bg-primary-dark"
+                  onClick={handlePurchase}
+                >
                   Purchase
-                </button>
-                <button className="bg-gray-100 text-gray-800 py-2 px-6 rounded-lg shadow hover:bg-gray-200">
-                  Contact Seller
                 </button>
               </div>
             </div>
           </div>
-
         </div>
-          {/* Reviews Section */}
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">All Reviews</h2>
-            {product.reviews && product.reviews.length > 0 ? (
+        {/* Reviews Section */}
+        <div className="mt-12">
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            All Reviews
+          </h2>
+          <hr className="border-neutral mb-6" />
+          {review && review.reviews.length > 0 ? (
+            <>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {product.reviews.map((review: any, index: number) => (
-                  <li
-                    key={index}
-                    className="p-4 bg-gray-50 border rounded-lg shadow-sm"
-                  >
-                    <p className="text-gray-800 text-lg mb-2">
-                      {review.comment}
-                    </p>
-                    <div className="flex items-center text-yellow-400 text-lg">
-                      {"★".repeat(Math.round(review.rating))}
-                      {"☆".repeat(5 - Math.round(review.rating))}
-                    </div>
-                    <p className="text-gray-600 text-sm mt-2">
-                      Posted on {new Date(review.date).toLocaleDateString()}
-                    </p>
-                  </li>
-                ))}
+                {review.reviews
+                  .slice(0, visibleReviews)
+                  .map((review: any, index: number) => (
+                    <li
+                      key={index}
+                      className="px-8 py-4 bg-neutral rounded-lg shadow-sm hover:scale-105 transition-all"
+                    >
+                      <div className="flex items-center text-yellow-400 text-2xl">
+                        {"★".repeat(Math.round(review.rating))}
+                        {"☆".repeat(5 - Math.round(review.rating))}
+                      </div>
+                      <p className="text-sm mt-2 mb-5 font-bold">
+                        {review.user.username}
+                      </p>
+                      <p className="text-gray-800 text-base mb-2">
+                        &quot;{review.comment}&quot;
+                      </p>
+                    </li>
+                  ))}
               </ul>
-            ) : (
-              <p className="text-gray-600">No reviews available.</p>
-            )}
+              {review.reviews.length > visibleReviews && (
+                <div className="flex justify-center">
+                  <button
+                    onClick={handleLoadMoreReviews}
+                    className="mt-6 min-w-44 text-white hover:text-primary-dark bg-secondary py-2 px-6 rounded-full shadow hover:bg-primary"
+                  >
+                    Load More
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            <p className="text-gray-600">No reviews available.</p>
+          )}
+        </div>
+        {/* Add Review Section */}
+        <div className="flex justify-center">
+          <div className="mt-12 lg:min-w-[500px]">
+            <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+              Add a Review
+            </h2>
+            <form
+              className="space-y-4"
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleAddReview();
+              }}
+            >
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Rating (1-5)
+                </label>
+                <input
+                  ref={ratingRef}
+                  type="number"
+                  min="1"
+                  max="5"
+                  className="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Comment
+                </label>
+                <textarea
+                  ref={commentRef}
+                  className="block w-full mt-1 border border-gray-300 rounded-md shadow-sm focus:ring-primary focus:border-primary"
+                />
+              </div>
+              <button
+                type="submit"
+                className="bg-secondary hover:bg-primary text-white py-2 px-6 rounded-full shadow hover:bg-primary-dark"
+              >
+                Submit Review
+              </button>
+            </form>
           </div>
+        </div>
       </div>
       <Footer />
     </>

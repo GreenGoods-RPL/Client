@@ -12,42 +12,62 @@ interface User {
 }
 
 const ProfilePage: React.FC = () => {
-  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [role, setRole] = useState<string | null>(null); // To store user role
   const router = useRouter();
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
+    const fetchRoleAndProfile = async () => {
       try {
-        const response = await fetch("http://localhost:8008/api/user", {
+        // Fetch role from token or user API
+        const token = localStorage.getItem("token");
+        if (!token) {
+          throw new Error("No token found");
+        }
+
+        const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decode JWT payload
+        const userRole = decodedToken.role; // Assuming role is included in the token
+        console.log("Decoded token:", decodedToken);
+        console.log("User role:", userRole);
+        
+        setRole(userRole);
+
+        // Determine API endpoint based on role
+        const apiEndpoint =
+          userRole === "seller"
+            ? "http://localhost:8008/api/seller"
+            : "http://localhost:8008/api/user";
+
+        const response = await fetch(apiEndpoint, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
         if (response.ok) {
-          const data: User = await response.json();
-          setUser(data);
+          const data: ProfileData = await response.json();
+          setProfile(data);
         } else {
-          console.error("Failed to fetch user details");
+          console.error("Failed to fetch profile details");
         }
       } catch (error) {
-        console.error("An error occurred while fetching user details:", error);
+        console.error("An error occurred:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUserDetails();
+    fetchRoleAndProfile();
   }, []);
 
   if (loading) {
     return <p>Loading...</p>;
   }
 
-  if (!user) {
+  if (!profile) {
     return (
       <p>
         Unable to load user details. Please try again later or ensure you are
@@ -63,13 +83,13 @@ const ProfilePage: React.FC = () => {
         <h1 className="text-2xl font-bold mb-6 text-primary mt-10">Profile</h1>
         <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">
-            Hello, {user.username}!
+            Hello, {profile.username}!
           </h2>
           <p className="text-gray-600 mb-2">
-            <strong>Email:</strong> {user.email}
+            <strong>Email:</strong> {profile.email}
           </p>
           <p className="text-gray-600 mb-6">
-            <strong>Points:</strong> {user.points}
+            <strong>Points:</strong> {profile.points}
           </p>
 
           {/* Sections */}

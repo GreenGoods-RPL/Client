@@ -12,7 +12,11 @@ export default function Leaderboard() {
   const mockData = [
     { name: "Alice", greenScore: 120 },
     { name: "Bob", greenScore: 100 },
-    { name: "Charlie", greenScore: 80 },
+    { name: "Charlie", greenScore: 86 },
+    { name: "Darren", greenScore: 83 },
+    { name: "Billie", greenScore: 80 },
+    { name: "Jake", greenScore: 76 },
+    { name: "Jamie", greenScore: 70 },
   ];
 
   // Fetch leaderboard data
@@ -39,7 +43,7 @@ export default function Leaderboard() {
   if (error) return <div>{error}</div>;
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="min-h-screen">
       <Header />
       <div className="max-w-4xl mx-auto bg-white rounded shadow-md p-6">
         <h1 className="text-2xl font-bold mb-4">🌱 Green Score Leaderboard</h1>
