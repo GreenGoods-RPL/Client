@@ -11,10 +11,6 @@ export const getReviews = async (productId: string) => {
 
 export const createReview = async (review: {productId: string; rating: number, comment: string}, token: string) => {
   try {
-    console.log("form data 1: ", review.productId);
-    console.log("form data 1: ", review.rating);
-    console.log("form data 2: ", review.comment);
-    
     const response = await fetch(`http://localhost:8008/api/review`, 
       {
         method: "POST",
@@ -27,7 +23,7 @@ export const createReview = async (review: {productId: string; rating: number, c
     );
     return await response.json();
   } catch (error) {
-    console.error("Error uploading course:", error);
+    console.error("Error adding review:", error);
     throw error;
   }
 };

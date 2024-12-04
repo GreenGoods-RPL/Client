@@ -25,10 +25,7 @@ export default function AboutFooter() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
           <div>
-            <h3 className="font-bold text-xl mb-4">GREENGOODS</h3>
-            <p className="text-sm text-gray-600 mb-4">
-              We have clothes that suits your style and which you&apos;re proud to wear. From women to men.
-            </p>
+            <h3 className="font-bold text-xl mb-4">GreenGoods</h3>
             <div className="flex space-x-4">
               <Twitter className="text-gray-400" />
               <Facebook className="text-gray-400" />
@@ -54,7 +51,7 @@ export default function AboutFooter() {
         </div>
         
         <div className="mt-12 pt-8 border-t border-gray-200 flex items-center justify-between">
-          <p className="text-sm text-gray-600">GREENGOODS © 2000-2023. All Rights Reserved</p>
+          <p className="text-sm text-gray-600">GreenGoods © 2000-2023. All Rights Reserved</p>
         </div>
       </div>
     </footer>

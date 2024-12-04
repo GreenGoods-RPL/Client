@@ -35,7 +35,7 @@ const ProfilePage: React.FC = () => {
 
         // Determine API endpoint based on role
         const apiEndpoint =
-          userRole === "seller"
+          role === "seller"
             ? "http://localhost:8008/api/seller"
             : "http://localhost:8008/api/user";
 
@@ -79,7 +79,7 @@ const ProfilePage: React.FC = () => {
   return (
     <>
       <Header />
-      <section className="min-h-screen flex flex-col items-center">
+      <section className="flex flex-col items-center">
         <h1 className="text-2xl font-bold mb-6 text-primary mt-10">Profile</h1>
         <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
           <h2 className="text-xl font-semibold text-gray-700 mb-4">
