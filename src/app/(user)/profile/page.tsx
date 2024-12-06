@@ -5,12 +5,6 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
-interface User {
-  username: string;
-  email: string;
-  points: number;
-}
-
 const ProfilePage: React.FC = () => {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -35,9 +29,10 @@ const ProfilePage: React.FC = () => {
 
         // Determine API endpoint based on role
         const apiEndpoint =
-          role === "seller"
+          userRole === "seller"
             ? "http://localhost:8008/api/seller"
             : "http://localhost:8008/api/user";
+        console.log("API endpoint:", apiEndpoint);
 
         const response = await fetch(apiEndpoint, {
           method: "GET",
@@ -48,7 +43,7 @@ const ProfilePage: React.FC = () => {
         });
 
         if (response.ok) {
-          const data: ProfileData = await response.json();
+          const data = await response.json();
           setProfile(data);
         } else {
           console.error("Failed to fetch profile details");

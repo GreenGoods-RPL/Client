@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
 import FilterSidebar from "@/components/FilterSidebar";
+import { searchProducts } from "@/services/product";
 
 export default function SearchResults() {
   const searchParams = useSearchParams();
@@ -18,19 +19,9 @@ export default function SearchResults() {
     if (keyword) {
       const fetchProducts = async () => {
         try {
-          const response = await fetch(
-            `http://localhost:8008/api/product/search?keyword=${encodeURIComponent(
-              keyword
-            )}`
-          );
-
-          if (!response.ok) {
-            throw new Error("Failed to fetch search results.");
-          }
-
-          const data = await response.json();
-          setProducts(data);
-        } catch (error) {
+          const products = await searchProducts(keyword);
+          setProducts(products);
+        } catch(error) {
           console.error("Error fetching products:", error);
         } finally {
           setIsLoading(false);
@@ -87,6 +78,7 @@ export default function SearchResults() {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.map((product) => (
                 <ProductCard
+                  id={product.id}
                   key={product.id}
                   image={product.image}
                   title={product.name}

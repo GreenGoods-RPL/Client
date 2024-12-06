@@ -30,3 +30,17 @@ export const purchaseProduct = async (
     throw error;
   }
 };
+
+export const searchProducts = async (keyword: string) => {
+  try {
+    const response = await fetch(
+      `http://localhost:8008/api/product/search?keyword=${encodeURIComponent(
+        keyword
+      )}`
+    );
+
+    return await response.json();
+  } catch (error) {
+    console.error("Error searching products:", error);
+  }
+};
