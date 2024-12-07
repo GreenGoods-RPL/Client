@@ -11,10 +11,9 @@ const ProfilePage: React.FC = () => {
   useEffect(() => {
     const fetchRoleAndProfile = async () => {
       try {
-        // Fetch role from token or user API
         const token = localStorage.getItem("token");
 
-        const response = await fetch("http://localhost:8008/api/user", {
+        const response = await fetch("http://localhost:8008/api/seller", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -68,22 +67,10 @@ const ProfilePage: React.FC = () => {
 
           {/* Sections */}
           <button
-            onClick={() => router.push("/vouchers")}
+            onClick={() => router.push("/orders")}
             className="w-full py-2 px-4 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
           >
-            View Vouchers
-          </button>
-          <button
-            onClick={() => router.push("/transactions")}
-            className="w-full py-2 px-4 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
-          >
-            View Transactions
-          </button>
-          <button
-            onClick={() => router.push("/address")}
-            className="w-full py-2 px-4 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
-          >
-            Add/Delete Address
+            View Orders
           </button>
         </div>
       </section>
