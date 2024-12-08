@@ -64,6 +64,26 @@ export const deleteAddress = async (token: string, addressId: string) => {
   }
 };
 
+export const redeemVoucher = async (token: string, voucher: any) => {
+  console.log(voucher);
+  try {
+    const response = await fetch(
+      `http://localhost:8008/api/user/redeem`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(voucher),
+      }
+    );
+    return await response.json();
+  } catch (error) {
+    console.error("Error deleting address:", error);
+  }
+};
+
 export const addAddress = async (
   address: {
     street: string;

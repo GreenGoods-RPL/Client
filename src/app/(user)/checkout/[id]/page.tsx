@@ -3,11 +3,18 @@
 import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { getProductById, purchaseProduct } from "@/services/product";
-import { getAddresses, getVouchers } from "@/services/user";
+import { getAddresses, getVouchers, redeemVoucher } from "@/services/user";
 import Image from "next/image";
 import duck from "@public/images/duck.jpeg";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 export default function CheckoutPage({ params }: { params: { id: string } }) {
   const productId = use(params).id;
@@ -63,7 +70,8 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
     }
 
     try {
-      const result = await purchaseProduct(productId, quantity, token);
+      await purchaseProduct(productId, quantity, token);
+      await redeemVoucher(token, selectedVoucher);
       alert("Your order was placed successfully!");
       router.push("/transactions");
     } catch (error) {
@@ -163,24 +171,33 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">
                   Apply Voucher
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="mx-10">
                   {vouchers.length > 0 ? (
-                    vouchers.map((voucher) => (
-                      <div
-                        key={voucher.id}
-                        className={`p-4 border rounded-lg cursor-pointer ${
-                          selectedVoucher === voucher.id
-                            ? "border-primary bg-primary-light"
-                            : "border-gray-300"
-                        }`}
-                        onClick={() => setSelectedVoucher(voucher.id)}
-                      >
-                        <p className="text-lg font-bold">{voucher.code}</p>
-                        <p className="text-gray-600">
-                          {voucher.isRedeemed ? "Redeemed" : "Available"}
-                        </p>
-                      </div>
-                    ))
+                    <Carousel>
+                      <CarouselContent>
+                        {vouchers.map((voucher) => (
+                          <CarouselItem key={voucher.id} className="basis-1/2">
+                            <div
+                              className={`p-4 border rounded-lg cursor-pointer ${
+                                selectedVoucher === voucher.id
+                                  ? "border-primary bg-primary-light"
+                                  : "border-gray-300"
+                              }`}
+                              onClick={() => setSelectedVoucher(voucher)}
+                            >
+                              <p className="text-lg font-bold">
+                                {voucher.code}
+                              </p>
+                              <p className="text-gray-600">
+                                {voucher.isRedeemed ? "Redeemed" : "Available"}
+                              </p>
+                            </div>
+                          </CarouselItem>
+                        ))}
+                      </CarouselContent>
+                      <CarouselPrevious />
+                      <CarouselNext />
+                    </Carousel>
                   ) : (
                     <p className="text-gray-600">No vouchers available.</p>
                   )}
@@ -230,7 +247,9 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
             {/* Place Order */}
             <button
               className={`text-white py-3 px-6 rounded w-full ${
-                selectedAddress ? "bg-primary hover:bg-secondary" : "bg-gray-400"
+                selectedAddress
+                  ? "bg-primary hover:bg-secondary"
+                  : "bg-gray-400"
               }`}
               onClick={handlePurchase}
               disabled={!selectedAddress}
