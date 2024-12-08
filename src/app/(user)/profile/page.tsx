@@ -83,7 +83,7 @@ const ProfilePage: React.FC = () => {
             onClick={() => router.push("/address")}
             className="w-full py-2 px-4 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
           >
-            Add/Delete Address
+            Manage Address
           </button>
         </div>
       </section>

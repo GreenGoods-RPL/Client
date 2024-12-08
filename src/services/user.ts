@@ -88,3 +88,20 @@ export const addAddress = async (
     throw error;
   }
 };
+
+export const completeTransaction = async (token, transactionId) => {
+  const response = await fetch(`http://localhost:8008/api/user/completeTransaction/${transactionId}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ transactionId }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to complete transaction");
+  }
+
+  return await response.json();
+};

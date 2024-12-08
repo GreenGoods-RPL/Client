@@ -67,10 +67,16 @@ const ProfilePage: React.FC = () => {
 
           {/* Sections */}
           <button
-            onClick={() => router.push("/orders")}
+            onClick={() => router.push("/seller/orders")}
             className="w-full py-2 px-4 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
           >
             View Orders
+          </button>
+          <button
+            onClick={() => router.push("/seller/products")}
+            className="w-full py-2 px-4 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
+          >
+            Manage Products
           </button>
         </div>
       </section>

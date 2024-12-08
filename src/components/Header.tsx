@@ -81,7 +81,7 @@ const Header: React.FC = () => {
             <Link href="/seller" className="block px-4 py-2 text-sm">
               My Profile
             </Link>
-            <Link href="/orders" className="block px-4 py-2 text-sm">
+            <Link href="/seller/orders" className="block px-4 py-2 text-sm">
               My Orders
             </Link>
             <button onClick={handleLogout} className="block w-full text-left px-4 py-2 text-sm">
