@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useState, useRef, use } from "react";
+import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
 import duck from "@public/images/duck.jpeg";
 import { getProductById } from "@/services/product";
 import { getReviews, createReview } from "@/services/review";
-import { purchaseProduct } from "@/services/product";
 
 export default function ProductDetails({ params }: { params: { id: string } }) {
   const productId = use(params).id;
+  const router = useRouter();
   const [product, setProduct] = useState<any>(null);
   const [review, setReview] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -83,27 +84,6 @@ export default function ProductDetails({ params }: { params: { id: string } }) {
     setVisibleReviews(visibleReviews + 4);
   };
 
-  const handleQuantityChange = (type: string) => {
-    setQuantity((prev) =>
-      type === "increment" ? prev + 1 : Math.max(prev - 1, 1)
-    );
-  };
-
-  const handlePurchase = async () => {
-    try {
-      const token = localStorage.getItem("token");
-      if (!token) {
-        throw new Error("No authentication token available");
-      }
-
-      const result = await purchaseProduct(productId, quantity, token);
-      alert("Product purchased successfully!");
-      console.log("Product purchased:", result);
-    } catch (error) {
-      console.error("Error purchasing product:", error);
-    }
-  };
-
   if (isLoading) {
     return (
       <>
@@ -158,7 +138,7 @@ export default function ProductDetails({ params }: { params: { id: string } }) {
                 </span>
               </div>
               <p className="text-3xl font-bold text-gray-800 my-5">
-                ${product.price}
+                Rp{product.price}
               </p>
               <hr className="border-neutral my-4" />
               <div>
@@ -176,25 +156,9 @@ export default function ProductDetails({ params }: { params: { id: string } }) {
               </div>
               <hr className="border-neutral my-4" />
               <div className="flex items-center gap-4 mt-6">
-                {/* Quantity Controls */}
-                <div className="flex items-center text-white py-3 bg-secondary rounded-full min-w-32">
-                  <button
-                    onClick={() => handleQuantityChange("decrement")}
-                    className="px-4"
-                  >
-                    -
-                  </button>
-                  <span className="px-4">{quantity}</span>
-                  <button
-                    onClick={() => handleQuantityChange("increment")}
-                    className="px-4"
-                  >
-                    +
-                  </button>
-                </div>
                 <button
                   className="bg-secondary hover:bg-primary w-full text-white py-3 px-6 rounded-full shadow hover:bg-primary-dark"
-                  onClick={handlePurchase}
+                  onClick={() => router.push(`/checkout/${product.id}`)}
                 >
                   Purchase
                 </button>

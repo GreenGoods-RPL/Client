@@ -94,7 +94,7 @@ export default function ManageProducts() {
             >
               <div onClick={() => handleEditProduct(product.id)} className="cursor-pointer">
                 <h3 className="font-medium">{product.name}</h3>
-                <p>Price: ${product.price}</p>
+                <p>Price: Rp{product.price}</p>
                 <p>Stock: {product.stock}</p>
                 <p>Green Score: {product.green_score}</p>
                 <p>Status: {product.status}</p>

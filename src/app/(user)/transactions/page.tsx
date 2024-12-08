@@ -61,13 +61,13 @@ export default function TransactionsPage() {
                   <h3 className="text-lg font-semibold text-gray-800">
                     Product: {trans.product?.name || "N/A"}
                   </h3>
-                  <p className="text-gray-600">
-                    Purchase Date:{" "}
+                  <p className="text-gray-600 text-sm">
+                    {" "}
                     {new Date(trans.purchaseDate).toLocaleDateString()}
                   </p>
                   <p className="text-gray-600">Amount: {trans.amount}</p>
                   <p className="text-gray-600">
-                    Price: ${trans.product?.price || "0.00"}
+                    Price: Rp{trans.product?.price || "0.00"}
                   </p>
                   <p
                     className={`text-sm font-medium mt-2 ${

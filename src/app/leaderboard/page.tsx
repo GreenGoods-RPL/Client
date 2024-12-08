@@ -9,44 +9,32 @@ export default function Leaderboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const mockData = [
-    { name: "Alice", greenScore: 120 },
-    { name: "Bob", greenScore: 100 },
-    { name: "Charlie", greenScore: 86 },
-    { name: "Darren", greenScore: 83 },
-    { name: "Billie", greenScore: 80 },
-    { name: "Jake", greenScore: 76 },
-    { name: "Jamie", greenScore: 70 },
-  ];
-
-  // Fetch leaderboard data
+  // Fetch leaderboard data from the backend API
   useEffect(() => {
-    // async function fetchLeaderboard() {
-    //   try {
-    //     setLoading(true);
-    //     const response = await fetch(`https://localhost:8008/api/leaderboard}`);
-    //     if (!response.ok) throw new Error("Failed to fetch leaderboard data");
+    async function fetchLeaderboard() {
+      try {
+        setLoading(true);
+        const response = await fetch(`http://localhost:8008/api/leaderboard`);
+        if (!response.ok) throw new Error("Failed to fetch leaderboard data");
 
-    //     const data = await response.json();
-    //     setLeaderboard(data);
-    //   } catch (err) {
-    //     setError(err.message);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // }
-    // fetchLeaderboard();
-    setLeaderboard(mockData);
-    setLoading(false);
+        const data = await response.json();
+        setLeaderboard(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchLeaderboard();
   }, []);
 
-  if (error) return <div>{error}</div>;
+  if (error) return <div className="min-h-screen"><Header /><div className="text-red-500 text-center p-6">{error}</div><Footer /></div>;
 
   return (
     <div className="min-h-screen">
       <Header />
       <div className="max-w-4xl mx-auto bg-white rounded shadow-md p-6">
-        <h1 className="text-2xl font-bold mb-4">🌱 Green Score Leaderboard</h1>
+        <h1 className="text-2xl font-bold mb-4">Leaderboard - Top 20</h1>
         {loading ? (
           <div>Loading...</div>
         ) : (
@@ -54,19 +42,19 @@ export default function Leaderboard() {
             <thead>
               <tr className="bg-gray-200">
                 <th className="py-2 px-4">Rank</th>
-                <th className="py-2 px-4">Name</th>
-                <th className="py-2 px-4">Green Score</th>
+                <th className="py-2 px-4">Username</th>
+                <th className="py-2 px-4">Points</th>
               </tr>
             </thead>
             <tbody>
               {leaderboard.map((user, index) => (
                 <tr
-                  key={user.name}
+                  key={user.id}
                   className={index % 2 === 0 ? "bg-gray-100" : ""}
                 >
                   <td className="py-2 px-4">{index + 1}</td>
-                  <td className="py-2 px-4">{user.name}</td>
-                  <td className="py-2 px-4">{user.greenScore}</td>
+                  <td className="py-2 px-4">{user.username}</td>
+                  <td className="py-2 px-4">{user.points}</td>
                 </tr>
               ))}
             </tbody>

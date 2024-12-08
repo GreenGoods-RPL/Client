@@ -99,7 +99,7 @@ const AdminDashboard = () => {
             >
               <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
               <p className="text-sm text-gray-600">
-                <strong>Price:</strong> ${product.price}
+                <strong>Price:</strong> Rp{product.price}
               </p>
               <p className="text-sm text-gray-600">
                 <strong>Description:</strong> {product.description}

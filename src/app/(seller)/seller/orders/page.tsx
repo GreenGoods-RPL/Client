@@ -88,10 +88,10 @@ const Orders = () => {
                 <strong>Quantity:</strong> {order.amount}
               </p>
               <p className="text-sm text-gray-600">
-                <strong>Total Price:</strong> ${order.totalPrice.toFixed(2)}
+                <strong>Total Price:</strong> Rp{order.totalPrice.toFixed(2)}
               </p>
               <p className="text-sm text-gray-600">
-                <strong>Purchase Date:</strong> {new Date(order.purchaseDate).toLocaleDateString()}
+                {new Date(order.purchaseDate).toLocaleDateString()}
               </p>
               <p className="text-sm text-gray-600">
                 <strong>Status:</strong> {order.status}
