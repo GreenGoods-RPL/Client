@@ -21,7 +21,7 @@ export default function SearchResults() {
         try {
           const products = await searchProducts(keyword);
           setProducts(products);
-        } catch(error) {
+        } catch (error) {
           console.error("Error fetching products:", error);
         } finally {
           setIsLoading(false);
@@ -32,7 +32,6 @@ export default function SearchResults() {
     }
   }, [keyword]);
 
-  // Function to fetch filtered products
   const fetchFilteredProducts = async (filters: {
     minPrice?: string;
     maxPrice?: string;
@@ -42,14 +41,19 @@ export default function SearchResults() {
     setIsLoading(true);
     try {
       const query = new URLSearchParams(filters).toString();
-      const response = await fetch(`http://localhost:8008/api/product/filter?${query}`);
+      const response = await fetch(
+        `http://localhost:8008/api/product/filter?${query}`
+      );
 
       if (!response.ok) {
         throw new Error("Failed to fetch filtered products.");
       }
 
       const data = await response.json();
-      setProducts(data);
+      const productsWithImages = data.map((product: any) => ({
+        ...product
+      }));
+      setProducts(productsWithImages);
     } catch (error) {
       console.error("Error fetching filtered products:", error);
     } finally {
@@ -59,30 +63,28 @@ export default function SearchResults() {
 
   return (
     <>
-      {/* Header */}
       <Header />
 
-      {/* Main Content */}
       <div className="flex flex-col lg:flex-row px-10 lg:px-16 py-6 gap-6">
         {/* Filter Sidebar */}
         <FilterSidebar onApplyFilters={fetchFilteredProducts} />
 
         {/* Product Display Section */}
         <section className="flex-1">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6">
-            {keyword ? `Search Results for "${keyword}"` : "Filtered Products"}
+          <h2 className="text-2xl font-bold text-primary mb-6">
+            {keyword ? `Search Results for "${keyword}"` : "Look for Products"}
           </h2>
           {isLoading ? (
-            <p>Loading...</p>
+            <p>Enter your search keyword...</p>
           ) : products.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.map((product) => (
                 <ProductCard
                   id={product.id}
                   key={product.id}
-                  image={product.image}
+                  image={null}
                   title={product.name}
-                  rating={product.rating}
+                  rating={product.avg_rating || 0}
                   price={product.price}
                 />
               ))}
@@ -91,7 +93,7 @@ export default function SearchResults() {
             <p>
               {keyword
                 ? `No products found for "${keyword}".`
-                : "No products found with the selected filters."}
+                : "No products found with the selected filters..."}
             </p>
           )}
         </section>

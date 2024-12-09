@@ -8,45 +8,64 @@ import Footer from "@/components/Footer";
 export default function AddressPage() {
   const [addresses, setAddresses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [newAddress, setNewAddress] = useState({ street: "", city: "", country: "", postalCode: "" });
+  const [newAddress, setNewAddress] = useState({
+    street: "",
+    city: "",
+    country: "",
+    postalCode: "",
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingAddressId, setDeletingAddressId] = useState(null);
+  const [error, setError] = useState(null);
 
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   useEffect(() => {
-    if (token) {
-      const fetchAddresses = async () => {
-        try {
-          const response = await getAddresses(token);
-          setAddresses(response);
-        } catch (error) {
-          console.error("Failed to fetch addresses:", error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      fetchAddresses();
-    }
+    if (!token) return;
+
+    const fetchAddresses = async () => {
+      try {
+        const response = await getAddresses(token);
+        setAddresses(Array.isArray(response) ? response : []); // Ensure response is an array
+      } catch (error) {
+        console.error("Failed to fetch addresses:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchAddresses();
   }, [token]);
 
-  const handleDeleteAddress = async (id: string) => {
+  const handleDeleteAddress = async (id) => {
+    if (!token) return;
+
+    setDeletingAddressId(id);
+    setError(null);
     try {
       await deleteAddress(token, id);
-      setAddresses((prev) => prev.filter((address) => address.id !== id)); // Update state
+      setAddresses((prev) => prev.filter((address) => address.id !== id));
     } catch (error) {
       console.error("Failed to delete address:", error);
+      setError("Failed to delete address. Please try again.");
+    } finally {
+      setDeletingAddressId(null);
     }
   };
 
   const handleAddAddress = async (e) => {
     e.preventDefault();
+    if (!token) return;
+
     setIsSubmitting(true);
+    setError(null);
     try {
       const addedAddress = await addAddress(newAddress, token);
       setAddresses((prev) => [...prev, addedAddress]);
-      setNewAddress({ street: "", city: "", country: "", postalCode: "" }); // Reset form
+      setNewAddress({ street: "", city: "", country: "", postalCode: "" });
     } catch (error) {
       console.error("Failed to add address:", error);
+      setError("Failed to add address. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -59,10 +78,16 @@ export default function AddressPage() {
         <div className="max-w-4xl mx-auto">
           <h1 className="text-3xl font-bold text-center text-gray-800 mb-8">Your Addresses</h1>
 
+          {/* Error Message */}
+          {error && <div className="text-red-500 text-center mb-4">{error}</div>}
+
           {/* Add Address Form */}
           <div className="mb-8">
-            <form onSubmit={handleAddAddress} className="bg-white shadow-md rounded-2xl p-6 border border-gray-200">
-            <h2 className="text-xl font-semibold text-gray-700 mb-4">Add New Address</h2>
+            <form
+              onSubmit={handleAddAddress}
+              className="bg-white shadow-md rounded-2xl p-6 border border-gray-200"
+            >
+              <h2 className="text-xl font-semibold text-gray-700 mb-4">Add New Address</h2>
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <input
                   type="text"
@@ -113,10 +138,7 @@ export default function AddressPage() {
           ) : addresses.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {addresses.map((address) => (
-                <div
-                  key={address.id}
-                  className="bg-neutral shadow-md rounded-2xl p-6"
-                >
+                <div key={address.id} className="bg-neutral shadow-md rounded-2xl p-6">
                   <h2 className="text-lg font-semibold text-gray-700">
                     Street: <span className="text-blue-500">{address.street}</span>
                   </h2>
@@ -132,8 +154,10 @@ export default function AddressPage() {
                   <button
                     onClick={() => handleDeleteAddress(address.id)}
                     className="mt-4 w-full bg-red-400 text-white py-2 px-4 rounded-full hover:bg-red-500"
+                    disabled={deletingAddressId === address.id}
+                    aria-disabled={deletingAddressId === address.id}
                   >
-                    Delete Address
+                    {deletingAddressId === address.id ? "Deleting..." : "Delete Address"}
                   </button>
                 </div>
               ))}

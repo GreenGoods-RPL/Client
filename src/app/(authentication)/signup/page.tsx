@@ -69,7 +69,7 @@ export default function SignupPage() {
       <Logo />
 
       {/* Main Content */}
-      <div className="flex flex-col lg:flex-row items-center shadow-lg rounded-3xl bg-neutral">
+      <div className="flex flex-col lg:flex-row items-center shadow-lg rounded-3xl bg-white">
         {/* Left Image */}
         <div className="hidden lg:block">
           <Image src={signup} alt="Signup Illustration" width={400} height={400} />

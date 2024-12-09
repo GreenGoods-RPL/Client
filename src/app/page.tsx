@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <div className="font-montserrat px-10 lg:px-16">
+      <div className="font-montserrat px-10 lg:px-28">
         <main>
           <Hero />
           <TopSellingProducts />

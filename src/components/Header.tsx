@@ -52,10 +52,10 @@ const Header: React.FC = () => {
     if (!isAuthenticated) {
       return (
         <>
-          <Link href="/login" className="block px-4 py-2 text-sm hover:bg-gray-200">
-            Login
+          <Link href="/login" className="block px-4 py-2 text-sm">
+            Log In
           </Link>
-          <Link href="/signup" className="block px-4 py-2 text-sm hover:bg-gray-200">
+          <Link href="/signup" className="block px-4 py-2 text-sm">
             Sign Up
           </Link>
         </>
@@ -126,22 +126,22 @@ const Header: React.FC = () => {
 
         {/* Navigation Section */}
         <nav className="flex gap-6">
-          <div className="hidden md:flex gap-6">
+          <div className="hidden md:flex gap-6 text-lg">
             <Link
               href="/"
-              className="text-lg font-semibold text-primary hover:text-secondary"
+              className="font-semibold text-primary hover:text-secondary"
             >
               Home
             </Link>
             <Link
               href="/about"
-              className="text-lg font-semibold text-primary hover:text-secondary"
+              className="font-semibold text-primary hover:text-secondary"
             >
               About Us
             </Link>
             <Link
               href="/leaderboard"
-              className="text-lg font-semibold text-primary hover:text-secondary"
+              className="font-semibold text-primary hover:text-secondary"
             >
               Leaderboard
             </Link>

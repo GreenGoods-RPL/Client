@@ -77,7 +77,7 @@ export default function ManageProducts() {
   };
 
   return (
-    <div>
+    <div className="px-10">
       <h1 className="text-2xl font-bold mb-4">Manage Products</h1>
       <button
         onClick={handleCreateProduct}
@@ -90,7 +90,7 @@ export default function ManageProducts() {
           products.map((product) => (
             <div
               key={product.id}
-              className="product-item border border-gray-300 p-4 mb-4 rounded flex justify-between items-center"
+              className="product-item border border-gray-300 bg-white p-4 mb-4 rounded-xl flex justify-between items-center"
             >
               <div onClick={() => handleEditProduct(product.id)} className="cursor-pointer">
                 <h3 className="font-medium">{product.name}</h3>

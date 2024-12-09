@@ -1,5 +1,6 @@
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
+import duck from "@public/images/duck.jpg";
 
 export default function ProductCard({
   id,
@@ -16,9 +17,9 @@ export default function ProductCard({
 }) {
   return (
     <Link href={`/product/${id}`} passHref>
-      <div className="cursor-pointer min-h-[425px] min-w-[315px] bg-[#F0EEED] shadow-md rounded-2xl overflow-hidden transform transition duration-300 hover:scale-105">
+      <div className="cursor-pointer min-h-[400px] min-w-[280px] bg-[#F0EEED] shadow-md rounded-2xl overflow-hidden transform transition duration-300 hover:scale-105">
         <Image
-          src={image}
+          src={duck}
           alt={"boilerplate image"}
           className="w-full h-64 object-cover"
         />
@@ -31,7 +32,7 @@ export default function ProductCard({
             </span>
             <span className="text-gray-600 ml-2">({rating})</span>
           </div>
-          <p className="text-primary text-xl">${price}</p>
+          <p className="text-primary text-lg">Rp{price}</p>
         </div>
       </div>
     </Link>

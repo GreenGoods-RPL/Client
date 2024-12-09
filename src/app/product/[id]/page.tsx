@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Image from "next/image";
-import duck from "@public/images/duck.jpeg";
+import duck from "@public/images/duck.jpg";
 import { getProductById } from "@/services/product";
 import { getReviews, createReview } from "@/services/review";
 
@@ -15,7 +15,6 @@ export default function ProductDetails({ params }: { params: { id: string } }) {
   const [product, setProduct] = useState<any>(null);
   const [review, setReview] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [quantity, setQuantity] = useState<number>(1);
   const [visibleReviews, setVisibleReviews] = useState<number>(4);
 
   // Refs for form inputs
@@ -116,11 +115,11 @@ export default function ProductDetails({ params }: { params: { id: string } }) {
           {/* Product Info Section */}
           <div className="flex flex-col md:flex-row gap-10">
             {/* Product Image */}
-            <div className="md:w-1/2">
+            <div className="md:w-1/2 flex justify-center items-center">
               <Image
                 src={duck}
                 alt="Product Image"
-                className="w-full h-auto object-cover rounded-lg"
+                className="w-full h-[550px] object-cover rounded-lg"
               />
             </div>
             {/* Product Details */}
@@ -155,6 +154,25 @@ export default function ProductDetails({ params }: { params: { id: string } }) {
                 <p className="font-bold text-2xl">{product.green_score}</p>
               </div>
               <hr className="border-neutral my-4" />
+              {/* Certificate Section */}
+              <div className="border border-primary rounded-lg p-4 bg-green-100">
+                <h3 className="text-lg font-bold text-primary mb-2">
+                  Eco-Friendly Certification
+                </h3>
+                <p className="text-gray-700 text-sm mb-2">
+                  This product is certified by{product.certificates}
+                  <strong>{product.certificate}</strong>, ensuring it meets high
+                  sustainability standards.
+                </p>
+                <div className="flex items-center">
+                  <ul className="list-disc list-inside text-gray-700">
+                    <li>Energy efficient</li>
+                    <li>Recyclable materials</li>
+                    <li>Minimal environmental impact</li>
+                  </ul>
+                </div>
+              </div>
+              <hr className="border-neutral my-4" />
               <div className="flex items-center gap-4 mt-6">
                 <button
                   className="bg-secondary hover:bg-primary w-full text-white py-3 px-6 rounded-full shadow hover:bg-primary-dark"
@@ -187,7 +205,7 @@ export default function ProductDetails({ params }: { params: { id: string } }) {
                         {"☆".repeat(5 - Math.round(review.rating))}
                       </div>
                       <p className="text-sm mt-2 mb-5 font-bold">
-                        {review.user.username}
+                        {review && review.user.username}
                       </p>
                       <p className="text-gray-800 text-base mb-2">
                         &quot;{review.comment}&quot;

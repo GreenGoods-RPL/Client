@@ -51,7 +51,7 @@ export default function Page() {
     <section className="flex flex-col items-center justify-center min-h-screen">
       <Logo />
       {/* Main Content */}
-      <div className="flex flex-col lg:flex-row items-center shadow-lg rounded-3xl bg-neutral border-2">
+      <div className="flex flex-col lg:flex-row items-center shadow-lg rounded-3xl bg-white border-2">
         {/* Left Image */}
         <div className="hidden lg:block border-">
           <Image

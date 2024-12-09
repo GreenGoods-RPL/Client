@@ -2,8 +2,15 @@
 
 import { useEffect, useState } from "react";
 import ProductCard from "@/components/ProductCard";
-import duck from "@public/images/duck.jpeg";
+import duck from "@public/images/duck.jpg";
 import Button from "@/components/Button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const TopSellingProducts = () => {
   const [products, setProducts] = useState<any[]>([]);
@@ -35,20 +42,20 @@ const TopSellingProducts = () => {
   return (
     <section className="py-8">
       <div className="container flex flex-col items-center justify-center">
-        <h1 className="font-yanone font-bold text-5xl text-primary mb-6">
+        <h1 className="font-yanone font-bold lg:text-5xl text-3xl text-primary mb-6">
           TOP SELLING
         </h1>
         {isLoading ? (
           <p>Loading...</p>
         ) : products.length > 0 ? (
           <div className="mb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
+            {products.slice(0, 4).map((product) => (
               <ProductCard
                 id={product.id}
                 key={product.id}
-                image={product.image}
-                title={product.name} // Assuming the API returns "name" for product titles
-                rating={product.avg_rating || 0} // Adjust based on API response
+                image={null}
+                title={product.name}
+                rating={product.avg_rating || 0}
                 price={product.price}
               />
             ))}

@@ -95,7 +95,7 @@ const AdminDashboard = () => {
           {products.map((product) => (
             <div
               key={product.id}
-              className="border border-gray-300 rounded-lg shadow-sm p-4"
+              className="border bg-white border-gray-300 rounded-lg shadow-sm p-4"
             >
               <h2 className="text-lg font-semibold mb-2">{product.name}</h2>
               <p className="text-sm text-gray-600">

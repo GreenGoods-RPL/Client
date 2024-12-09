@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { getProductById, purchaseProduct } from "@/services/product";
 import { getAddresses, getVouchers, redeemVoucher } from "@/services/user";
 import Image from "next/image";
-import duck from "@public/images/duck.jpeg";
+import duck from "@public/images/duck.jpg";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import {
@@ -171,7 +171,7 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                 <h2 className="text-2xl font-semibold text-gray-800 mb-4">
                   Apply Voucher
                 </h2>
-                <div className="mx-10">
+                <div className="mx-10 max-w-xl">
                   {vouchers.length > 0 ? (
                     <Carousel>
                       <CarouselContent>

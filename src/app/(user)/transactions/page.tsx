@@ -59,7 +59,7 @@ export default function TransactionsPage() {
               >
                 <div className="mb-4">
                   <h3 className="text-lg font-semibold text-gray-800">
-                    Product: {trans.product?.name || "N/A"}
+                    {trans.product?.name || "N/A"}
                   </h3>
                   <p className="text-gray-600 text-sm">
                     {" "}
@@ -73,7 +73,7 @@ export default function TransactionsPage() {
                     className={`text-sm font-medium mt-2 ${
                       trans.status === "FINISHED"
                         ? "text-green-600"
-                        : trans.status === "Delivered"
+                        : trans.status === "DELIVERED"
                         ? "text-blue-600"
                         : "text-yellow-600"
                     }`}
