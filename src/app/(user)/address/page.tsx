@@ -61,7 +61,8 @@ export default function AddressPage() {
     setError(null);
     try {
       const addedAddress = await addAddress(newAddress, token);
-      setAddresses((prev) => [...prev, addedAddress]);
+      
+      setAddresses((prev) => [...prev, addedAddress.address]);
       setNewAddress({ street: "", city: "", country: "", postalCode: "" });
     } catch (error) {
       console.error("Failed to add address:", error);

@@ -102,7 +102,7 @@ export const addAddress = async (
       },
       body: JSON.stringify(address),
     });
-    return await response;
+    return await response.json();
   } catch (error) {
     console.error("Error adding address:", error);
     throw error;
