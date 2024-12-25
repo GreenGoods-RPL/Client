@@ -31,6 +31,9 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
+    if(addresses.length === 0) {
+      alert("You have not added any address yet.\nPlease add an address first.");
+    }
     const fetchData = async () => {
       try {
         setIsLoading(true);
@@ -159,7 +162,7 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
                   onChange={(e) => setSelectedAddress(e.target.value)}
                 >
                   <option value="">Select an address</option>
-                  {addresses.map((address) => (
+                  {(addresses.length > 0) && addresses.map((address) => (
                     <option key={address.id} value={address.id}>
                       {`${address.street}, ${address.city}, ${address.country}`}
                     </option>
