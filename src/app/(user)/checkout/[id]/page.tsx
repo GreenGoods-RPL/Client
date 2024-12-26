@@ -31,9 +31,6 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if(addresses.length === 0) {
-      alert("You have not added any address yet.\nPlease add an address first.");
-    }
     const fetchData = async () => {
       try {
         setIsLoading(true);
@@ -45,6 +42,9 @@ export default function CheckoutPage({ params }: { params: { id: string } }) {
 
         // Fetch user addresses
         const userAddresses = await getAddresses(token);
+        if(userAddresses.length === 0) {
+          alert("You have not added any address yet.\nPlease add an address first.");
+        }
         setAddresses(userAddresses);
 
         // Fetch user vouchers

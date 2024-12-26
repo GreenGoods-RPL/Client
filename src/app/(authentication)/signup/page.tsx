@@ -65,22 +65,32 @@ export default function SignupPage() {
   };
 
   return (
-    <section className="flex flex-col items-center justify-center min-h-screen">
+    <section className="flex flex-col min-h-screen">
       <Logo />
 
       {/* Main Content */}
-      <div className="flex flex-col lg:flex-row items-center shadow-lg rounded-3xl bg-white">
+      <div className="flex flex-col lg:flex-row items-center shadow-lg bg-white">
         {/* Left Image */}
-        <div className="hidden lg:block">
-          <Image src={signup} alt="Signup Illustration" width={400} height={400} />
+        <div className="hidden lg:block w-1/2 h-screen overflow-hidden">
+          <Image
+            src={signup}
+            alt="Signup Illustration"
+            width={800}
+            height={800}
+            className="object-cover"
+          />
         </div>
 
         {/* Right Signup Form */}
-        <div className="p-8 w-full lg:w-[450px] rounded-tr-lg rounded-br-lg">
-          <h2 className="text-2xl font-bold text-center mb-6 text-primary font-montserrat">Sign Up</h2>
+        <div className="px-16 w-1/2 flex flex-col justify-center">
+          <h2 className="text-2xl font-bold text-center mb-6 text-primary font-montserrat">
+            Sign Up
+          </h2>
 
           {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-          {success && <p className="text-green-500 text-center mb-4">{success}</p>}
+          {success && (
+            <p className="text-green-500 text-center mb-4">{success}</p>
+          )}
 
           <form className="space-y-6" onSubmit={handleSubmit}>
             {/* Username and Email (Side by Side on Large Screens) */}

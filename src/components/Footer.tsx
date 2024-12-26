@@ -26,7 +26,7 @@ export default function AboutFooter() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between md:grid-cols-5 gap-8">
           <div>
-            <h3 className="font-bold text-xl mb-4">GreenGoods</h3>
+            <h3 className="font-bold text-xl mb-4 text-primary">GreenGoods</h3>
             <div className="flex space-x-4">
               <Twitter className="text-gray-400" />
               <Facebook className="text-gray-400" />
@@ -34,25 +34,7 @@ export default function AboutFooter() {
               <Youtube className="text-gray-400" />
             </div>
           </div>
-          <div className="flex gap-20">
-            {footerSections.map((section) => (
-              <div key={section.title} className="min-w-32">
-                <h4 className="font-semibold mb-4">{section.title}</h4>
-                <ul className="space-y-2">
-                  {section.links.map((link) => (
-                    <li key={link}>
-                      <a
-                        href="#"
-                        className="text-sm text-gray-600 hover:text-gray-900"
-                      >
-                        {link}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+          
         </div>
 
         <div className="mt-5 pt-8 border-t border-gray-200 flex items-center justify-between">

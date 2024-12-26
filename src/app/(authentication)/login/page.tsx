@@ -48,23 +48,24 @@ export default function Page() {
   };
 
   return (
-    <section className="flex flex-col items-center justify-center min-h-screen">
+    <section className="flex flex-col min-h-screen">
       <Logo />
       {/* Main Content */}
-      <div className="flex flex-col lg:flex-row items-center shadow-lg rounded-3xl bg-white border-2">
+      <div className="flex flex-col lg:flex-row items-center shadow-lg bg-white">
         {/* Left Image */}
-        <div className="hidden lg:block border-">
+        <div className="hidden lg:block w-1/2 h-screen overflow-hidden">
           <Image
             src={login}
             alt="Login Illustration"
-            width={400}
-            height={400}
+            width={800}
+            height={800}
+            className={"object-cover"}
           />
         </div>
 
         {/* Right Login Form */}
-        <div className="p-8 w-full lg:w-[450px]">
-          <h2 className="text-2xl font-bold text-center mb-6 text-primary font-montserrat">
+        <div className="px-16 w-1/2 flex flex-col justify-center">
+          <h2 className="text-2xl font-bold text-center mb-16 text-primary font-montserrat">
             Login
           </h2>
 
@@ -120,7 +121,7 @@ export default function Page() {
               <button
                 type="submit"
                 disabled={loading}
-                className={`w-full py-2 rounded-lg transition-colors ${
+                className={`w-full mt-16 py-2 rounded-lg transition-colors ${
                   loading
                     ? "bg-gray-400"
                     : "bg-primary text-white hover:bg-secondary"
